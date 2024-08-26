@@ -855,17 +855,17 @@ Come to **TypeScript 201** next Friday if you want more
 
 ## Draw incoming edges (subtypes)
 
-![](img/union1.png){width=600px}
+![](img/union1.png){width=800px}
 
 
 ## Draw outgoing edges (supertypes)
 
-![](img/union2.png){width=600px}
+![](img/union2.png){width=800px}
 
 
 ## Finished
 
-![](img/union3.png){width=600px}
+![](img/union3.png){width=800px}
 
 
 <!-- ## Myth: your goal is to make the type error go away -->
