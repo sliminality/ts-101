@@ -617,6 +617,34 @@ Shouldn't `B` be the **subtype**, since it's a **subset** of properties?
 
 ![Each field in `Dog` must be a subtype of the corresponding `Animal` field](img/subtyping-depth.svg)
 
+## Depth example
+
+::: columns
+::: column
+```ts
+type Experiment = {
+    id: string,
+    env: "local" 
+       | "dev" 
+       | "stg" 
+       | "prod",
+}
+```
+:::
+::: column
+```ts
+type RiskyExperiment = {
+    id: string,
+    env: "local" 
+       | "dev",
+    endDate: Date,
+}
+```
+:::
+:::
+
+`RiskyExperiment` can apply to a **subset** of environments.
+
 ## Subtyping visualization
 
 ![$A \to \ldots \to B$ means "$A$ is a subtype of $B$"](img/subtyping-0.png)

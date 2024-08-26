@@ -747,6 +747,31 @@ alt="Each field in Dog must be a subtype of the corresponding Animal field" />
 subtype of the corresponding <code>Animal</code> field</figcaption>
 </figure>
 </section>
+<section id="depth-example" class="slide level2">
+<h2>Depth example</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Experiment <span class="op">=</span> {</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    env<span class="op">:</span> <span class="st">&quot;local&quot;</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="st">&quot;dev&quot;</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="st">&quot;stg&quot;</span> </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="st">&quot;prod&quot;</span><span class="op">,</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> RiskyExperiment <span class="op">=</span> {</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    env<span class="op">:</span> <span class="st">&quot;local&quot;</span> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>       <span class="op">|</span> <span class="st">&quot;dev&quot;</span><span class="op">,</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    endDate<span class="op">:</span> <span class="bu">Date</span><span class="op">,</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<p><code>RiskyExperiment</code> can apply to a <strong>subset</strong>
+of environments.</p>
+</section>
 <section id="subtyping-visualization" class="slide level2">
 <h2>Subtyping visualization</h2>
 <figure>
@@ -767,36 +792,36 @@ class="title-slide slide level1">
 <h2>Example: Blocks to text</h2>
 <div class="columns">
 <div class="column">
-<div class="sourceCode" id="cb33"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Base type.</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> BlockBase <span class="op">=</span> {</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Base type.</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> BlockBase <span class="op">=</span> {</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </div><div class="column">
-<div class="sourceCode" id="cb34"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Subtypes.</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ImageBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    src<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    caption<span class="op">:</span> <span class="dt">string</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> DividerBlock <span class="op">=</span> BlockBase</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Subtypes.</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ImageBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    src<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    caption<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> DividerBlock <span class="op">=</span> BlockBase</span></code></pre></div>
 </div>
 </div>
 </section>
 <section id="how-should-we-write-this-function" class="slide level2">
 <h2>How should we write this function?</h2>
-<div class="sourceCode" id="cb35"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> Block)<span class="op">:</span> <span class="dt">string</span> {</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// TodoBlock    -&gt; &quot;[x]&quot; vs. &quot;[ ]&quot;</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ImageBlock   -&gt; caption</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// DividerBlock -&gt; &quot;--------------&quot;</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> Block)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// TodoBlock    -&gt; &quot;[x]&quot; vs. &quot;[ ]&quot;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ImageBlock   -&gt; caption</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// DividerBlock -&gt; &quot;--------------&quot;</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section></section>
 <section>
 <section id="myth-any-means-all-possible-types"
@@ -873,13 +898,13 @@ bottom</h3>
 </section>
 <section id="lest-you-think-i-am-exaggerating" class="slide level2">
 <h2>Lest you think I am exaggerating</h2>
-<div class="sourceCode" id="cb36"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _true <span class="op">=</span> <span class="kw">true</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _bool<span class="op">:</span> <span class="dt">boolean</span> <span class="op">=</span> _true</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _haha<span class="op">:</span> <span class="dt">any</span> <span class="op">=</span> _bool</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _foo<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">=</span> _haha</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _fooOrBar<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">|</span> <span class="st">&quot;bar&quot;</span> <span class="op">=</span> _foo</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _string<span class="op">:</span> <span class="dt">string</span> <span class="op">=</span> _fooOrBar</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _true <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _bool<span class="op">:</span> <span class="dt">boolean</span> <span class="op">=</span> _true</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _haha<span class="op">:</span> <span class="dt">any</span> <span class="op">=</span> _bool</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _foo<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">=</span> _haha</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _fooOrBar<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">|</span> <span class="st">&quot;bar&quot;</span> <span class="op">=</span> _foo</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _string<span class="op">:</span> <span class="dt">string</span> <span class="op">=</span> _fooOrBar</span></code></pre></div>
 </section>
 <section id="good-news-one-easy-trick" class="slide level2">
 <h2>Good news: one easy trick</h2>
@@ -904,17 +929,17 @@ class="sourceCode ts"><code class="sourceCode typescript"><span id="cb36-1"><a h
 </section>
 <section id="example-blocks-to-text-1" class="slide level2">
 <h2>Example: Blocks to text</h2>
-<div class="sourceCode" id="cb37"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> TodoBlock <span class="op">|</span> ImageBlock <span class="op">|</span> DividerBlock)<span class="op">:</span> <span class="dt">string</span> {</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;todo&quot;</span>) {</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">checked</span> <span class="op">?</span> <span class="st">&quot;[x]&quot;</span> <span class="op">:</span> <span class="st">&quot;[ ]&quot;</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;image&quot;</span>) {</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">caption</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// DividerBlock -&gt; </span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;--------------&quot;</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> TodoBlock <span class="op">|</span> ImageBlock <span class="op">|</span> DividerBlock)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;todo&quot;</span>) {</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">checked</span> <span class="op">?</span> <span class="st">&quot;[x]&quot;</span> <span class="op">:</span> <span class="st">&quot;[ ]&quot;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;image&quot;</span>) {</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">caption</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// DividerBlock -&gt; </span></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;--------------&quot;</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section></section>
 <section>
 <section id="make-invalid-states-unrepresentable"
@@ -924,41 +949,41 @@ class="title-slide slide level1">
 </section>
 <section id="api-status-optional-soup" class="slide level2">
 <h2>API status: optional soup</h2>
-<div class="sourceCode" id="cb38"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span> <span class="op">|</span> <span class="st">&quot;loading&quot;</span> <span class="op">|</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">?:</span> <span class="bu">Error</span><span class="op">,</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span> <span class="op">|</span> <span class="st">&quot;loading&quot;</span> <span class="op">|</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">?:</span> <span class="bu">Error</span><span class="op">,</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section>
 <section id="api-status-discriminated-union" class="slide level2">
 <h2>API status: discriminated union</h2>
-<div class="sourceCode" id="cb39"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span><span class="op">,</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">:</span> <span class="bu">Error</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">:</span> <span class="dt">string</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;loading&quot;</span><span class="op">,</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span><span class="op">,</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">:</span> <span class="bu">Error</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;loading&quot;</span><span class="op">,</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section>
 <section id="refinements" class="slide level2">
 <h2>Refinements</h2>
-<div class="sourceCode" id="cb40"><pre
-class="sourceCode ts"><code class="sourceCode typescript"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">declare</span> <span class="kw">const</span> r<span class="op">:</span> ApiResponse </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;error&quot;</span>) {</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">error</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;success&quot;</span>) {</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">data</span> satisfies string</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;loading&quot;</span>) {</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    r satisfies never</span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">declare</span> <span class="kw">const</span> r<span class="op">:</span> ApiResponse </span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;error&quot;</span>) {</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">error</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;success&quot;</span>) {</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">data</span> satisfies string</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;loading&quot;</span>) {</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    r satisfies never</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 </section></section>
 <section id="thanks" class="title-slide slide level1">
 <h1>Thanks!</h1>
