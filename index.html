@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Slim Lim">
+  <title>TypeScript 101: Opinionated fundamentals</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        background-color: #2a211c;
+        color: #bdae9d;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+    div.sourceCode
+      { color: #58595c; background-color: #fdfdfd; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #c54516; font-weight: bold; } /* Alert */
+    code span.an { color: #cc7e7e; font-style: italic; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #586dba; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #9d0909; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #586dba; } /* Char */
+    code span.cn { } /* Constant */
+    code span.co { color: #cc7e7e; font-style: italic; } /* Comment */
+    code span.do { color: #cc7e7e; font-style: italic; } /* Documentation */
+    code span.dt { color: #f20000; } /* DataType */
+    code span.dv { color: #586dba; } /* DecVal */
+    code span.er { color: #c54516; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #586dba; } /* Float */
+    code span.fu { color: #f20000; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #cc7e7e; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #9d0909; font-weight: bold; } /* Keyword */
+    code span.op { color: #a67f59; } /* Operator */
+    code span.ot { color: #cc7e7e; } /* Other */
+    code span.pp { font-weight: bold; } /* Preprocessor */
+    code span.sc { color: #586dba; } /* SpecialChar */
+    code span.ss { color: #586dba; } /* SpecialString */
+    code span.st { color: #586dba; } /* String */
+    code span.va { } /* Variable */
+    code span.vs { color: #586dba; } /* VerbatimString */
+    code span.wa { color: #c54516; font-weight: bold; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/black.css" id="theme">
+  <link rel="stylesheet" href="slim.css"/>
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">TypeScript 101: Opinionated fundamentals</h1>
+  <p class="subtitle">For people who already use it at work</p>
+  <p class="author">Slim Lim</p>
+</section>
+
+<section id="about-me" class="slide level2">
+<h2>About me</h2>
+<ul>
+<li>Product Infrastructure team</li>
+<li>Joined Notion in 2019 (7 engineers)</li>
+<li>Left in late 2021 to focus on PhD</li>
+<li>Returned late 2022, balancing both (poorly)</li>
+</ul>
+</section>
+<section id="my-relationship-to-typescript" class="slide level2">
+<h2>My relationship to TypeScript</h2>
+<ul>
+<li>Complex</li>
+<li>Long-lived</li>
+<li>Deeply antagonistic</li>
+</ul>
+</section>
+<section id="typescript-vs.-other-type-systems" class="slide level2">
+<h2>TypeScript vs. other type systems</h2>
+<ul>
+<li>Popular</li>
+<li>More expressive</li>
+<li>More dangerous</li>
+</ul>
+</section>
+<section id="problem-all-existing-resources-are-bad."
+class="title-slide slide level1">
+<h1>Problem: all existing resources are bad.</h1>
+
+</section>
+
+<section>
+<section id="background" class="title-slide slide level1">
+<h1>Background</h1>
+
+</section>
+<section id="why-was-typescript-created" class="slide level2">
+<h2>Why was TypeScript created?</h2>
+<blockquote>
+<p>To migrate <strong>large</strong>, <strong>untyped</strong>
+enterprise codebases</p>
+</blockquote>
+</section>
+<section id="legacy-javascript" class="slide level2">
+<h2>Legacy JavaScript</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">var</span> OrderProcessor <span class="op">=</span> (<span class="kw">function</span>() {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">var</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> order<span class="op">.</span><span class="at">items</span><span class="op">.</span><span class="at">length</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> item <span class="op">=</span> order<span class="op">.</span><span class="at">items</span>[i]<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="kw">var</span> product <span class="op">=</span> inventory[item<span class="op">.</span><span class="at">id</span>]<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (product <span class="op">&amp;&amp;</span> product<span class="op">.</span><span class="at">stock</span> <span class="op">&gt;=</span> item<span class="op">.</span><span class="at">qty</span>) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            total <span class="op">+=</span> item<span class="op">.</span><span class="at">qty</span> <span class="op">*</span> product<span class="op">.</span><span class="at">price</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>            product<span class="op">.</span><span class="at">stock</span> <span class="op">-=</span> item<span class="op">.</span><span class="at">qty</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>})()<span class="op">;</span></span></code></pre></div>
+</section>
+<section id="this-isnt-how-notion-uses-typescript" class="slide level2">
+<h2>This isn’t how Notion uses TypeScript!</h2>
+<p>We are not 2015-era Microsoft/Google/Facebook</p>
+</section>
+<section id="then-vs.-now" class="slide level2">
+<h2>Then vs. now</h2>
+<div class="columns">
+<div class="column">
+<ul>
+<li>Code starts <strong>untyped</strong></li>
+<li>Priority is <strong>preserve existing behavior</strong></li>
+<li>Escape hatches <strong>no worse</strong> than baseline</li>
+</ul>
+</div><div class="column">
+<ul>
+<li>Code starts <strong>typed</strong></li>
+<li>New code should be written <strong>using typed idioms</strong></li>
+<li>Escape hatches <strong>much worse</strong> than baseline</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="escape-hatches" class="slide level2">
+<h2>Escape hatches?</h2>
+<ul>
+<li><strong>Cop-out type</strong>: <code>any</code></li>
+<li><strong>Pragmas</strong>: <code>@ts-ignore</code></li>
+<li><strong>Flags</strong>:
+<code>--suppressImplicitAnyIndexErrors</code></li>
+</ul>
+</section>
+<section id="escape-hatches-cont." class="slide level2">
+<h2>Escape hatches, cont.</h2>
+<ul>
+<li><p><strong>Casts</strong>: <code>x as Foo</code></p></li>
+<li><p><strong>Type guards</strong>:
+<code>f(x: unknown): x is Foo</code></p></li>
+<li><p><strong>Overloads</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getEnd</span>(d<span class="op">:</span> <span class="bu">Date</span>)<span class="op">:</span> <span class="dt">undefined</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getEnd</span>(d<span class="op">:</span> DateRange)<span class="op">:</span> <span class="bu">Date</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getEnd</span>(d<span class="op">:</span> <span class="bu">Date</span> <span class="op">|</span> DateRange) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">...</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+</ul>
+</section>
+<section id="how-notion-uses-typescript" class="slide level2">
+<h2>How Notion uses TypeScript</h2>
+<ul>
+<li>As a <strong>fully-typed language</strong></li>
+<li>With the benefits of the JavaScript ecosystem</li>
+<li>Helps us write correct programs</li>
+<li><em>TypeScript: The Good Parts</em></li>
+</ul>
+</section></section>
+<section>
+<section id="foundations" class="title-slide slide level1">
+<h1>Foundations</h1>
+<ul>
+<li>Types vs. values</li>
+<li>Structural subtyping</li>
+</ul>
+</section>
+<section id="types-vs.-values" class="slide level2">
+<h2>Types vs. values</h2>
+</section>
+<section class="slide level2">
+
+<!-- Example 1 -->
+<div class="columns">
+<div class="column">
+<h3 id="types">Types</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Env <span class="op">=</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="st">&quot;local&quot;</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="st">&quot;dev&quot;</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="st">&quot;stg&quot;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">|</span> <span class="st">&quot;prod&quot;</span></span></code></pre></div>
+</div><div class="column">
+<h3 id="values">Values</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> env <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;local&quot;</span><span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;dev&quot;</span><span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;stg&quot;</span><span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;prod&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="sometimes-its-more-confusing" class="slide level2">
+<h2>Sometimes, it’s more confusing…</h2>
+<pre><code>&#39;code&#39; refers to a value, but is being used as a type here. Did you mean &#39;typeof code&#39;? (2749)</code></pre>
+</section>
+<section class="slide level2">
+
+<!-- Example 3 -->
+<div class="columns">
+<div class="column">
+<h3 id="types-1">Types</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Config <span class="op">=</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    local<span class="op">:</span> {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        db<span class="op">:</span> <span class="st">&quot;spaceShard001&quot;</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    dev<span class="op">:</span> {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        db<span class="op">:</span> <span class="st">&quot;spaceShard008&quot;</span><span class="op">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<h3 id="values-1">Values</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> config <span class="op">=</span> {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    local<span class="op">:</span> {</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        db<span class="op">:</span> <span class="st">&quot;spaceShard001&quot;</span><span class="op">,</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    dev<span class="op">:</span> {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        db<span class="op">:</span> <span class="st">&quot;spaceShard008&quot;</span><span class="op">,</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="taking-a-step-back-static-vs.-dynamic"
+class="slide level2">
+<h2>Taking a step back: static vs. dynamic</h2>
+</section>
+<section class="slide level2">
+
+<!-- Comparison -->
+<div class="columns">
+<div class="column">
+<h3 id="static">Static</h3>
+<ul>
+<li>Compile/build-time</li>
+<li>Parsing, linting, typechecking</li>
+<li>Type/lint errors</li>
+</ul>
+</div><div class="column">
+<h3 id="dynamic">Dynamic</h3>
+<ul>
+<li>Runtime</li>
+<li>Evaluation, execution</li>
+<li>Exceptions/crashes</li>
+</ul>
+</div>
+</div>
+<div class="fragment">
+<div class="columns">
+<div class="column">
+<blockquote>
+<p>“expectation”</p>
+</blockquote>
+</div><div class="column">
+<blockquote>
+<p>“reality”</p>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><span
+style="position: absolute; top: 1.5em; left: 50%; transform: translateX(-50%) translateY(-50%); color: #cc0909cf;"><em>approximates</em></span></p>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="columns">
+<div class="column">
+<h3 id="static-1">Static</h3>
+<ul>
+<li>Compile-time</li>
+<li>Parsing, linting, typechecking</li>
+<li>Type/lint errors</li>
+<li><strong>Types</strong></li>
+</ul>
+</div><div class="column">
+<h3 id="dynamic-1">Dynamic</h3>
+<ul>
+<li>Runtime</li>
+<li>Evaluation, execution</li>
+<li>Exceptions/crashes</li>
+<li><strong>Values</strong></li>
+</ul>
+</div>
+</div>
+<p><span
+style="position: absolute; top: 1.5em; left: 50%; transform: translateX(-50%) translateY(-50%); color: #cc0909cf;"><em>approximates</em></span></p>
+<div class="fragment">
+<blockquote>
+<p><strong>Types</strong> approximate <strong>values</strong>.</p>
+</blockquote>
+</div>
+</section>
+<section id="how-close-is-the-approximation" class="slide level2">
+<h2>How close is the approximation?</h2>
+</section>
+<section id="java-not-that-close" class="slide level2">
+<h2>Java: not that close</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Closest type (Java)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>"hello"</code></td>
+<td>String</td>
+</tr>
+<tr class="even">
+<td><code>true</code></td>
+<td>boolean</td>
+</tr>
+<tr class="odd">
+<td><code>1</code></td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="typescript-pretty-close" class="slide level2">
+<h2>TypeScript: pretty close!</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Value</th>
+<th>Closest type (TS)</th>
+<th>Closest type (Java)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>"hello"</code></td>
+<td><code>"hello"</code></td>
+<td>String</td>
+</tr>
+<tr class="even">
+<td><code>true</code></td>
+<td><code>true</code></td>
+<td>boolean</td>
+</tr>
+<tr class="odd">
+<td><code>1</code></td>
+<td><code>1</code></td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="type-level-vs.-value-level" class="slide level2">
+<h2>Type-level vs. value-level</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> BlockTable <span class="op">=</span> <span class="st">&quot;block&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">export type</span> BlockTable <span class="op">=</span> <span class="st">&quot;block&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { BlockTable } <span class="im">from</span> <span class="st">&quot;./schemas/Block&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="im">type</span> { BlockTable } <span class="im">from</span> <span class="st">&quot;./schemas/Block&quot;</span></span></code></pre></div>
+</section>
+<section id="type-level-vs.-value-level-1" class="slide level2">
+<h2>Type-level vs. value-level</h2>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> BlockTable <span class="op">=</span> <span class="st">&quot;block&quot;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">export type</span> BlockTable <span class="op">=</span> <span class="kw">typeof</span> BlockTable</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { BlockTable } <span class="im">from</span> <span class="st">&quot;./schemas/Block&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="im">type</span> { BlockTable } <span class="im">from</span> <span class="st">&quot;./schemas/Block&quot;</span></span></code></pre></div>
+</section>
+<section id="typeof-value-type" class="slide level2">
+<h2><code>typeof</code>: Value → Type</h2>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> BlockTable <span class="op">=</span> <span class="st">&quot;block&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">export type</span> BlockTable <span class="op">=</span> <span class="kw">typeof</span> BlockTable</span></code></pre></div>
+<div class="fragment">
+<blockquote>
+<p>dependent types</p>
+</blockquote>
+</div>
+</section>
+<section id="syntactic-restrictions" class="slide level2">
+<h2>Syntactic restrictions</h2>
+<pre><code>&#39;code&#39; refers to a value, but is being used as a type here. Did you mean &#39;typeof code&#39;? (2749)</code></pre>
+</section>
+<section id="syntactic-restrictions-1" class="slide level2">
+<h2>Syntactic restrictions</h2>
+<!-- Example 2 -->
+<div class="columns">
+<div class="column">
+<h3 id="types-2">Types</h3>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x<span class="op">:</span> ____ <span class="op">=</span> <span class="st">&quot;foo&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>x satisfies ____</span></code></pre></div>
+</div><div class="column">
+<h3 id="values-2">Values</h3>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x<span class="op">:</span> Foo <span class="op">=</span> ____</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>____ satisfies Foo</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="typescript-structural-subtyping" class="slide level2">
+<h2>TypeScript = structural subtyping</h2>
+</section>
+<section id="subtyping" class="slide level2">
+<h2>Subtyping</h2>
+<p><img data-src="img/animal.png" /> <!-- ```mermaid -->
+<!-- graph BT --> <!--    Cat & Dog -1-> Animal --> <!-- ``` --></p>
+<!-- ```mermaid -->
+<!-- graph BT -->
+<!--    Train & Bike & Car -1-> Vehicle -->
+<!-- ``` -->
+<!-- ```mermaid -->
+<!-- graph BT -->
+<!--    ImageBlock & TodoBlock & DividerBlock -1-> Block -->
+<!-- ``` -->
+</section>
+<section id="liskov-substitution-principle" class="slide level2">
+<h2>Liskov substitution principle</h2>
+<blockquote>
+<p>Can you replace type <code>Foo</code> with <code>Bar</code>,
+<strong>without breaking the program</strong>?</p>
+</blockquote>
+<div class="fragment">
+<p>→ <code>Bar</code> is a subtype of <code>Foo</code></p>
+</div>
+<div class="fragment">
+<p>→ <code>Bar</code> <span class="math inline">&lt;:</span>
+<code>Foo</code></p>
+</div>
+</section>
+<section id="liskov-substitution-principle-1" class="slide level2">
+<h2>Liskov substitution principle</h2>
+<blockquote>
+<p>Can you replace type <code>Block</code> with <code>TodoBlock</code>,
+<strong>without breaking the program</strong>?</p>
+</blockquote>
+<p>→ <code>TodoBlock</code> is a subtype of <code>Block</code></p>
+<p>→ <code>TodoBlock</code> <span class="math inline">&lt;:</span>
+<code>Block</code></p>
+</section>
+<section id="example-todoblock-block" class="slide level2">
+<h2>Example: <code>TodoBlock</code> <span
+class="math inline">&lt;:</span> <code>Block</code></h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isAlive</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    block<span class="op">:</span> Block</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> <span class="dt">boolean</span> {</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> block<span class="op">.</span><span class="at">alive</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isAlive</span>(block)</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="example-todoblock-block-1" class="slide level2">
+<h2>Example: <code>TodoBlock</code> <span
+class="math inline">&lt;:</span> <code>Block</code></h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> Block <span class="op">&amp;</span> {</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb20"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isAlive</span>(</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    block<span class="op">:</span> Block</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>)<span class="op">:</span> <span class="dt">boolean</span> {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> block<span class="op">.</span><span class="at">alive</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">isAlive</span>(todoBlock)</span></code></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p><em>Intuition:</em> <code>TodoBlock</code> provides <strong>at least
+as much</strong> information as <code>Block</code></p>
+<!--
+## `Assert` type
+
+```ts
+import { type Assert } from "@notionhq/shared-utils/typeUtils"
+
+type _A1 = Assert<Block, TodoBlock> // TodoBlock <: Block
+```
+
+(I think it's confusing that this is backwards)
+-->
+</div>
+</section>
+<section id="structural-subtyping" class="slide level2">
+<h2><em>Structural</em> subtyping</h2>
+</section>
+<section id="we-know-this-works" class="slide level2">
+<h2>We know this works:</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> Block <span class="op">&amp;</span> {</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+
+</div>
+</div>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> todoBlock<span class="op">:</span> TodoBlock <span class="op">=</span> { </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="st">&quot;todo1&quot;</span><span class="op">,</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>todoBlock satisfies Block <span class="co">// ✅ Works!</span></span></code></pre></div>
+</section>
+<section id="what-if-we-inline-everything-from-block"
+class="slide level2">
+<h2>What if we inline everything from <code>Block</code>?</h2>
+<div class="columns">
+<div class="column" style="opacity: 50%;">
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> Block <span class="op">&amp;</span> {</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> {</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">declare</span> <span class="kw">const</span> todoBlock<span class="op">:</span> TodoBlock</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>todoBlock satisfies Block <span class="co">// ✅ Still works!</span></span></code></pre></div>
+</div>
+</section>
+<section id="structural-subtyping-1" class="slide level2">
+<h2>Structural subtyping</h2>
+<p><strong>Nominal</strong> subtyping (Java, C++): based on explicit
+declarations/names.</p>
+<p><strong>Structural</strong> subtyping (TypeScript): based on shape
+and contents.</p>
+</section>
+<section id="analogy-group-chats" class="slide level2">
+<h2>Analogy: Group chats</h2>
+</section>
+<section id="corollary" class="slide level2">
+<h2>Corollary</h2>
+<blockquote>
+<p>Type aliases are for human benefit!</p>
+</blockquote>
+</section>
+<section id="quiz-which-is-the-subtype" class="slide level2">
+<h2>Quiz: Which is the subtype?</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> A <span class="op">=</span> {</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    foo<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    bar<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> B <span class="op">=</span> {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    foo<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<div class="fragment">
+<blockquote>
+<p>Answer: <code>A</code> is a subtype of <code>B</code></p>
+</blockquote>
+</div>
+</section>
+<section id="quiz-which-is-the-subtype-1" class="slide level2">
+<h2>Quiz: Which is the subtype?</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> {</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> Block <span class="op">=</span> {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<blockquote>
+<p>Answer: <code>TodoBlock</code> is a subtype of <code>Block</code></p>
+</blockquote>
+</section>
+<section id="why-is-this-unintuitive" class="slide level2">
+<h2>Why is this unintuitive?</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb31"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Sub</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> A <span class="op">=</span> {</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    foo<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    bar<span class="op">:</span> <span class="dt">number</span><span class="op">,</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb32"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Super</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> B <span class="op">=</span> {</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    foo<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+</div>
+<p>Shouldn’t <code>B</code> be the <strong>subtype</strong>, since it’s
+a <strong>subset</strong> of properties?</p>
+<div class="fragment">
+<blockquote>
+<p>A valid <strong>subtype</strong> must contain a
+<strong>superset</strong> of fields.</p>
+</blockquote>
+</div>
+<div class="fragment">
+<p>(because the subtype is <strong>more specific</strong>!)</p>
+</div>
+</section>
+<section id="object-subtyping-is-trickydouble-check-your-intuition"
+class="slide level2">
+<h2>Object subtyping is tricky—double-check your intuition!</h2>
+</section>
+<section id="width-rules" class="slide level2">
+<h2>Width rules</h2>
+<figure>
+<img data-src="img/subtyping-width.svg"
+alt="Dog contains all the fields in Animal" />
+<figcaption aria-hidden="true"><code>Dog</code> contains all the fields
+in <code>Animal</code></figcaption>
+</figure>
+</section>
+<section id="depth-rules" class="slide level2">
+<h2>Depth rules</h2>
+<figure>
+<img data-src="img/subtyping-depth.svg"
+alt="Each field in Dog must be a subtype of the corresponding Animal field" />
+<figcaption aria-hidden="true">Each field in <code>Dog</code> must be a
+subtype of the corresponding <code>Animal</code> field</figcaption>
+</figure>
+</section>
+<section id="subtyping-visualization" class="slide level2">
+<h2>Subtyping visualization</h2>
+<figure>
+<img data-src="img/subtyping-0.png"
+alt="A \to \ldots \to B means “A is a subtype of B”" />
+<figcaption aria-hidden="true"><span class="math inline">A \to \ldots
+\to B</span> means “<span class="math inline">A</span> is a subtype of
+<span class="math inline">B</span>”</figcaption>
+</figure>
+</section></section>
+<section>
+<section id="type-refinementsnarrowing-a-quick-review"
+class="title-slide slide level1">
+<h1>Type refinements/narrowing: a quick review</h1>
+
+</section>
+<section id="example-blocks-to-text" class="slide level2">
+<h2>Example: Blocks to text</h2>
+<div class="columns">
+<div class="column">
+<div class="sourceCode" id="cb33"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Base type.</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> BlockBase <span class="op">=</span> {</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    id<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    alive<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div><div class="column">
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Subtypes.</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TodoBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    checked<span class="op">:</span> <span class="dt">boolean</span><span class="op">,</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ImageBlock <span class="op">=</span> BlockBase <span class="op">&amp;</span> {</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    src<span class="op">:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    caption<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> DividerBlock <span class="op">=</span> BlockBase</span></code></pre></div>
+</div>
+</div>
+</section>
+<section id="how-should-we-write-this-function" class="slide level2">
+<h2>How should we write this function?</h2>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> Block)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// TodoBlock    -&gt; &quot;[x]&quot; vs. &quot;[ ]&quot;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ImageBlock   -&gt; caption</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// DividerBlock -&gt; &quot;--------------&quot;</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section></section>
+<section>
+<section id="myth-any-means-all-possible-types"
+class="title-slide slide level1">
+<h1>Myth: <code>any</code> means “all possible types”</h1>
+
+</section>
+<section class="slide level2">
+
+<h3 id="subtyping-directed-acyclic-graph-dag">Subtyping directed acyclic
+graph (DAG)</h3>
+<p><img data-src="img/dag0.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="path-in-dag-subtype">Path in DAG = subtype</h3>
+<p><img data-src="img/dag1.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="is-true-a-subtype-of-string">Is <code>true</code> a subtype of
+<code>string</code>?</h3>
+<p><img data-src="img/dag2.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="is-true-a-subtype-of-string-1">Is <code>true</code> a subtype of
+<code>string</code>?</h3>
+<p><img data-src="img/dag3.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="is-true-a-subtype-of-string-2">Is <code>true</code> a subtype of
+<code>string</code>?</h3>
+<p>No.</p>
+</section>
+<section class="slide level2">
+
+<h3 id="curse-of-any">Curse of <code>any</code></h3>
+<p><img data-src="img/dag0.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="any-at-the-topand-bottom"><code>any</code> at the top…and
+bottom</h3>
+<p><img data-src="img/any0.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="there-is-a-cycle">There is a cycle!</h3>
+<p><img data-src="img/any0.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="is-true-a-string">Is <code>true</code> a
+<code>string</code>?</h3>
+<p><img data-src="img/any1.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="we-can-get-past-unknown">We can get past
+<code>unknown</code>…</h3>
+<p><img data-src="img/any2.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="oops">Oops</h3>
+<p><img data-src="img/any2.png" width="600" /></p>
+</section>
+<section class="slide level2">
+
+<h3 id="oops-1">Oops</h3>
+<p><img data-src="img/any3.png" width="600" /></p>
+</section>
+<section id="lest-you-think-i-am-exaggerating" class="slide level2">
+<h2>Lest you think I am exaggerating</h2>
+<div class="sourceCode" id="cb36"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _true <span class="op">=</span> <span class="kw">true</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _bool<span class="op">:</span> <span class="dt">boolean</span> <span class="op">=</span> _true</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _haha<span class="op">:</span> <span class="dt">any</span> <span class="op">=</span> _bool</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _foo<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">=</span> _haha</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _fooOrBar<span class="op">:</span> <span class="st">&quot;foo&quot;</span> <span class="op">|</span> <span class="st">&quot;bar&quot;</span> <span class="op">=</span> _foo</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> _string<span class="op">:</span> <span class="dt">string</span> <span class="op">=</span> _fooOrBar</span></code></pre></div>
+</section>
+<section id="good-news-one-easy-trick" class="slide level2">
+<h2>Good news: one easy trick</h2>
+<blockquote>
+<p>Replace <code>any</code> with <code>unknown</code>!</p>
+</blockquote>
+<div class="fragment">
+<ul>
+<li>Works 85% of the time, for free</li>
+<li>Doctors hate her</li>
+<li>Not sure why this isn’t publicized more</li>
+</ul>
+</div>
+</section>
+<section id="unknown-is-the-true-top-type" class="slide level2">
+<h2><code>unknown</code> is the true “top” type</h2>
+<p><img data-src="img/any0.png" width="600" /></p>
+</section>
+<section id="what-about-never" class="slide level2">
+<h2>What about <code>never</code>?</h2>
+<p><img data-src="img/any0.png" width="600" /></p>
+</section>
+<section id="example-blocks-to-text-1" class="slide level2">
+<h2>Example: Blocks to text</h2>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">toPlainText</span>(block<span class="op">:</span> TodoBlock <span class="op">|</span> ImageBlock <span class="op">|</span> DividerBlock)<span class="op">:</span> <span class="dt">string</span> {</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;todo&quot;</span>) {</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">checked</span> <span class="op">?</span> <span class="st">&quot;[x]&quot;</span> <span class="op">:</span> <span class="st">&quot;[ ]&quot;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (block<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;image&quot;</span>) {</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> block<span class="op">.</span><span class="at">caption</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>        <span class="co">// DividerBlock -&gt; </span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">&quot;--------------&quot;</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section></section>
+<section>
+<section id="make-invalid-states-unrepresentable"
+class="title-slide slide level1">
+<h1>Make invalid states unrepresentable</h1>
+
+</section>
+<section id="api-status-optional-soup" class="slide level2">
+<h2>API status: optional soup</h2>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span> <span class="op">|</span> <span class="st">&quot;loading&quot;</span> <span class="op">|</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">?:</span> <span class="bu">Error</span><span class="op">,</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section>
+<section id="api-status-discriminated-union" class="slide level2">
+<h2>API status: discriminated union</h2>
+<div class="sourceCode" id="cb39"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ApiResponse <span class="op">=</span> {</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;error&quot;</span><span class="op">,</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    error<span class="op">:</span> <span class="bu">Error</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;success&quot;</span><span class="op">,</span></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    data<span class="op">:</span> <span class="dt">string</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>} <span class="op">|</span> {</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    type<span class="op">:</span> <span class="st">&quot;loading&quot;</span><span class="op">,</span></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    data<span class="op">?:</span> <span class="dt">string</span><span class="op">,</span></span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section>
+<section id="refinements" class="slide level2">
+<h2>Refinements</h2>
+<div class="sourceCode" id="cb40"><pre
+class="sourceCode ts"><code class="sourceCode typescript"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">declare</span> <span class="kw">const</span> r<span class="op">:</span> ApiResponse </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;error&quot;</span>) {</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">error</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;success&quot;</span>) {</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    r<span class="op">.</span><span class="at">data</span> satisfies string</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (r<span class="op">.</span><span class="at">type</span> <span class="op">===</span> <span class="st">&quot;loading&quot;</span>) {</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    r satisfies never</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</section></section>
+<section id="thanks" class="title-slide slide level1">
+<h1>Thanks!</h1>
+<p>Come to <strong>TypeScript 201</strong> next Friday if you want
+more</p>
+</section>
+
+<section id="miscellaneous-stuff-if-time"
+class="title-slide slide level1">
+<h1>Miscellaneous stuff if time</h1>
+
+</section>
+
+<section>
+<section id="cultural-practices" class="title-slide slide level1">
+<h1>Cultural practices</h1>
+
+</section>
+<section id="a-normal-day-on-the-internet" class="slide level2">
+<h2>A normal day on the internet</h2>
+<figure>
+<img data-src="img/example1-question.png"
+alt="How do I extend CSSProperties?" />
+<figcaption aria-hidden="true">How do I extend
+<code>CSSProperties</code>?</figcaption>
+</figure>
+</section>
+<section id="top-answer-just-cast" class="slide level2">
+<h2>Top answer: jUst cASt</h2>
+<p><img data-src="img/example1-cast.png" /></p>
+</section>
+<section id="another-normal-question" class="slide level2">
+<h2>Another <a
+href="https://stackoverflow.com/questions/42066421/property-value-does-not-exist-on-type-eventtarget">normal
+question</a></h2>
+<p><img data-src="img/example2-question.png" /> <img
+data-src="img/example2-cast.png" alt="jUst cASt" /></p>
+</section></section>
+<section>
+<section id="adding-union-types-to-dag"
+class="title-slide slide level1">
+<h1>Adding union types to DAG</h1>
+
+</section>
+<section id="how-to-introduce-a-union-type" class="slide level2">
+<h2>How to introduce a union type?</h2>
+<p><img data-src="img/union0.png" /></p>
+</section>
+<section id="draw-incoming-edges-subtypes" class="slide level2">
+<h2>Draw incoming edges (subtypes)</h2>
+<p><img data-src="img/union1.png" /></p>
+</section>
+<section id="draw-outgoing-edges-supertypes" class="slide level2">
+<h2>Draw outgoing edges (supertypes)</h2>
+<p><img data-src="img/union2.png" /></p>
+</section>
+<section id="finished" class="slide level2">
+<h2>Finished</h2>
+<p><img data-src="img/union3.png" /></p>
+<!-- ## Myth: your goal is to make the type error go away -->
+<!-- ## Myth: boolean maps are a good way to model types -->
+</section></section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: true,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1250,
+
+        height: 850,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
